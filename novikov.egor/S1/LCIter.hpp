@@ -7,16 +7,18 @@
 
 namespace novikov
 {
-  template < class T > class List;
+  template < class T >
+  class List;
 
-  template < class T > class LCIter
+  template < class T >
+  class LCIter
   {
     const Node< T > *node;
     friend class List< T >;
 
   public:
-    LCIter(const Node< T > *n = nullptr):
-      node(n)
+    LCIter(const Node< T > *node_ptr = nullptr):
+      node(node_ptr)
     {}
 
     const T &operator*() const

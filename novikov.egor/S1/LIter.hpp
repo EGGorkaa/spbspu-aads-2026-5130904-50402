@@ -7,16 +7,18 @@
 
 namespace novikov
 {
-  template < class T > class List;
+  template < class T >
+  class List;
 
-  template < class T > class LIter
+  template < class T >
+  class LIter
   {
     Node< T > *node;
     friend class List< T >;
 
   public:
-    LIter(Node< T > *n = nullptr):
-      node(n)
+    LIter(Node< T > *node_ptr = nullptr):
+      node(node_ptr)
     {}
 
     T &operator*()

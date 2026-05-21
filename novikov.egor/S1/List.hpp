@@ -7,7 +7,8 @@
 
 namespace novikov
 {
-  template < class T > class List
+  template < class T >
+  class List
   {
     Node< T > *head;
 
@@ -33,6 +34,22 @@ namespace novikov
         push_back(cur->data);
         cur = cur->next;
       } while (cur != other.head);
+    }
+
+    List(List &&other) noexcept:
+      head(other.head)
+    {
+      other.head = nullptr;
+    }
+
+    List &operator=(List &&other) noexcept
+    {
+      if (this != &other) {
+        clear();
+        head = other.head;
+        other.head = nullptr;
+      }
+      return *this;
     }
 
     List &operator=(List other)
@@ -94,7 +111,7 @@ namespace novikov
 
     void push_front(const T &val)
     {
-      Node<T> *node = new Node<T>{val, nullptr};
+      Node< T > *node = new Node< T >{val, nullptr};
       if (!head) {
         head = node;
         node->next = head;
@@ -119,7 +136,8 @@ namespace novikov
     }
   };
 
-  template < class T > struct IterState
+  template < class T >
+  struct IterState
   {
     LIter< T > current;
     LIter< T > start;
