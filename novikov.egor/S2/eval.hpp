@@ -13,6 +13,9 @@ namespace novikov
 {
   namespace
   {
+    const long long LLONG_MAX = std::numeric_limits< long long >::max();
+    const long long LLONG_MIN = std::numeric_limits< long long >::min();
+
     int priority(const std::string &op)
     {
       if (op == "+" || op == "-")
@@ -37,25 +40,21 @@ namespace novikov
     long long apply(long long a, long long b, const std::string &op)
     {
       if (op == "+") {
-        if ((b > 0 && a > std::numeric_limits< long long >::max() - b)
-            || (b < 0 && a < std::numeric_limits< long long >::min() - b)) {
+        if ((b > 0 && a > LLONG_MAX - b) || (b < 0 && a < LLONG_MIN - b)) {
           throw std::runtime_error("Overflow");
         }
         return a + b;
       }
       if (op == "-") {
-        if ((b < 0 && a > std::numeric_limits< long long >::max() + b)
-            || (b > 0 && a < std::numeric_limits< long long >::min() + b)) {
+        if ((b < 0 && a > LLONG_MAX + b) || (b > 0 && a < LLONG_MIN + b)) {
           throw std::runtime_error("Overflow");
         }
         return a - b;
       }
       if (op == "*") {
         if (a != 0 && b != 0) {
-          if ((a > 0 && b > 0 && a > std::numeric_limits< long long >::max() / b)
-              || (a > 0 && b < 0 && b < std::numeric_limits< long long >::min() / a)
-              || (a < 0 && b > 0 && a < std::numeric_limits< long long >::min() / b)
-              || (a < 0 && b < 0 && a < std::numeric_limits< long long >::max() / b)) {
+          if ((a > 0 && b > 0 && a > LLONG_MAX / b) || (a > 0 && b < 0 && b < LLONG_MIN / a)
+              || (a < 0 && b > 0 && a < LLONG_MIN / b) || (a < 0 && b < 0 && a < LLONG_MAX / b)) {
             throw std::runtime_error("Overflow");
           }
         }
@@ -64,9 +63,8 @@ namespace novikov
       if (op == "/") {
         if (b == 0)
           throw std::runtime_error("Division by zero");
-        if (a == std::numeric_limits< long long >::min() && b == -1) {
+        if (a == LLONG_MIN && b == -1)
           throw std::runtime_error("Overflow");
-        }
         return a / b;
       }
       if (op == "%") {
