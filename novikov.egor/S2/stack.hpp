@@ -3,10 +3,12 @@
 
 #include "../common/list.hpp"
 #include <stdexcept>
+#include <utility>
 
 namespace novikov
 {
-  template < class T > class Stack
+  template < class T >
+  class Stack
   {
     List< T > data;
 
@@ -15,26 +17,27 @@ namespace novikov
     {
       return data.empty();
     }
+
     void push(const T &val)
     {
       data.push_front(val);
     }
+
+    void push(T &&val)
+    {
+      data.push_front(std::move(val));
+    }
+
     T drop()
     {
       if (empty()) {
         throw std::runtime_error("Stack is empty");
       }
-      T val = *data.begin();
+      T val = std::move(*data.begin());
       data.pop_front();
       return val;
     }
-    T &front()
-    {
-      if (empty()) {
-        throw std::runtime_error("Stack is empty");
-      }
-      return *data.begin();
-    }
+
     const T &front() const
     {
       if (empty()) {
