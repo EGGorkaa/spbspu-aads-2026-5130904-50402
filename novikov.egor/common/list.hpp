@@ -7,14 +7,14 @@
 
 namespace novikov
 {
-  template < class T > 
+  template < class T >
   struct Node
   {
     T data;
     Node< T > *next;
   };
 
-  template < class T > 
+  template < class T >
   class LIter
   {
     Node< T > *node;
@@ -54,7 +54,7 @@ namespace novikov
     }
   };
 
-  template < class T > 
+  template < class T >
   class LCIter
   {
     const Node< T > *node;
@@ -94,7 +94,7 @@ namespace novikov
     }
   };
 
-  template < class T > 
+  template < class T >
   class List
   {
     Node< T > *head;
