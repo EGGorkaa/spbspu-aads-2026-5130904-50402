@@ -40,21 +40,21 @@ namespace novikov
     long long apply(long long a, long long b, const std::string &op)
     {
       if (op == "+") {
-        if ((b > 0 && a > LLONG_MAX - b) || (b < 0 && a < LLONG_MIN - b)) {
+        if ((b > 0 && a > LMAX - b) || (b < 0 && a < LMIN - b)) {
           throw std::runtime_error("Overflow");
         }
         return a + b;
       }
       if (op == "-") {
-        if ((b < 0 && a > LLONG_MAX + b) || (b > 0 && a < LLONG_MIN + b)) {
+        if ((b < 0 && a > LMAX + b) || (b > 0 && a < LMIN + b)) {
           throw std::runtime_error("Overflow");
         }
         return a - b;
       }
       if (op == "*") {
         if (a != 0 && b != 0) {
-          if ((a > 0 && b > 0 && a > LLONG_MAX / b) || (a > 0 && b < 0 && b < LLONG_MIN / a)
-              || (a < 0 && b > 0 && a < LLONG_MIN / b) || (a < 0 && b < 0 && a < LLONG_MAX / b)) {
+          if ((a > 0 && b > 0 && a > LMAX / b) || (a > 0 && b < 0 && b < LMIN / a)
+              || (a < 0 && b > 0 && a < LMIN / b) || (a < 0 && b < 0 && a < LMAX / b)) {
             throw std::runtime_error("Overflow");
           }
         }
@@ -63,7 +63,7 @@ namespace novikov
       if (op == "/") {
         if (b == 0)
           throw std::runtime_error("Division by zero");
-        if (a == LLONG_MIN && b == -1)
+        if (a == LMIN && b == -1)
           throw std::runtime_error("Overflow");
         return a / b;
       }
