@@ -13,8 +13,8 @@ namespace novikov
 {
   namespace
   {
-    const long long LLONG_MAX = std::numeric_limits< long long >::max();
-    const long long LLONG_MIN = std::numeric_limits< long long >::min();
+    const long long LMAX = std::numeric_limits< long long >::max();
+    const long long LMIN = std::numeric_limits< long long >::min();
 
     int priority(const std::string &op)
     {
