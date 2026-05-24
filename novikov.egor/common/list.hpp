@@ -3,16 +3,19 @@
 
 #include <cassert>
 #include <memory>
+#include <utility>
 
 namespace novikov
 {
-  template < class T > struct Node
+  template < class T > 
+  struct Node
   {
     T data;
     Node< T > *next;
   };
 
-  template < class T > class LIter
+  template < class T > 
+  class LIter
   {
     Node< T > *node;
 
@@ -51,7 +54,8 @@ namespace novikov
     }
   };
 
-  template < class T > class LCIter
+  template < class T > 
+  class LCIter
   {
     const Node< T > *node;
 
@@ -90,7 +94,8 @@ namespace novikov
     }
   };
 
-  template < class T > class List
+  template < class T > 
+  class List
   {
     Node< T > *head;
 
@@ -115,11 +120,28 @@ namespace novikov
       } while (cur != other.head);
     }
 
+    List(List &&other) noexcept:
+      head(other.head)
+    {
+      other.head = nullptr;
+    }
+
     List &operator=(List other)
     {
       swap(other);
       return *this;
     }
+
+    List &operator=(List &&other) noexcept
+    {
+      if (this != &other) {
+        clear();
+        head = other.head;
+        other.head = nullptr;
+      }
+      return *this;
+    }
+
     void swap(List &other)
     {
       Node< T > *tmp = head;
@@ -148,6 +170,7 @@ namespace novikov
     {
       return LCIter< T >(nullptr);
     }
+
     void push_back(const T &val)
     {
       Node< T > *node = new Node< T >{val, nullptr};
@@ -163,22 +186,57 @@ namespace novikov
       last->next = node;
       node->next = head;
     }
-    void push_front(const T &val)
+
+    void push_back(T &&val)
     {
-    Node<T> *node = new Node<T>{val, nullptr};
-    if (!head) {
+      Node< T > *node = new Node< T >{std::move(val), nullptr};
+      if (!head) {
         head = node;
         node->next = head;
         return;
-    }
-    Node<T> *last = head;
-    while (last->next != head) {
+      }
+      Node< T > *last = head;
+      while (last->next != head) {
         last = last->next;
+      }
+      last->next = node;
+      node->next = head;
     }
-    node->next = head;
-    last->next = node;
-    head = node;
+
+    void push_front(const T &val)
+    {
+      Node<T> *node = new Node<T>{val, nullptr};
+      if (!head) {
+        head = node;
+        node->next = head;
+        return;
+      }
+      Node<T> *last = head;
+      while (last->next != head) {
+        last = last->next;
+      }
+      node->next = head;
+      last->next = node;
+      head = node;
     }
+
+    void push_front(T &&val)
+    {
+      Node<T> *node = new Node<T>{std::move(val), nullptr};
+      if (!head) {
+        head = node;
+        node->next = head;
+        return;
+      }
+      Node<T> *last = head;
+      while (last->next != head) {
+        last = last->next;
+      }
+      node->next = head;
+      last->next = node;
+      head = node;
+    }
+
     void pop_front()
     {
       if (!head)
@@ -197,6 +255,7 @@ namespace novikov
       last->next = head;
       delete tmp;
     }
+
     void clear()
     {
       if (!head)
