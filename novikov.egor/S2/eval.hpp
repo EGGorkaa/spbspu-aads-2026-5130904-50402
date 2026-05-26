@@ -119,7 +119,6 @@ namespace novikov
   {
     Queue< std::string > postfix = toPostfix(expr);
     Stack< long long > st;
-
     while (!postfix.empty()) {
       std::string token = postfix.drop();
       if (token == "+" || token == "-" || token == "*" || token == "/" || token == "%" || token == "^") {
