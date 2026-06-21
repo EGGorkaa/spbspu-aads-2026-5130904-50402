@@ -4,6 +4,7 @@
 #include <boost/container_hash/hash.hpp>
 #include <functional>
 #include <utility>
+#include <algorithm>
 
 namespace novikov
 {
@@ -77,6 +78,67 @@ namespace novikov
     size_t size() const;
     bool empty() const;
   };
+
+  template < class Key, class Value, class Hash1, class Hash2, class Equal >
+  size_t CuckooHash< Key, Value, Hash1, Hash2, Equal >::hashPos1(const Key &key) const
+  {
+    return hash1_(key) % capacity_;
+  }
+
+  template < class Key, class Value, class Hash1, class Hash2, class Equal >
+  size_t CuckooHash< Key, Value, Hash1, Hash2, Equal >::hashPos2(const Key &key) const
+  {
+    return hash2_(key) % capacity_;
+  }
+
+  template < class Key, class Value, class Hash1, class Hash2, class Equal >
+  void CuckooHash< Key, Value, Hash1, Hash2, Equal >::swap(CuckooHash &other) noexcept
+  {
+    std::swap(table1_, other.table1_);
+    std::swap(table2_, other.table2_);
+    std::swap(capacity_, other.capacity_);
+    std::swap(size_, other.size_);
+    std::swap(hash1_, other.hash1_);
+    std::swap(hash2_, other.hash2_);
+    std::swap(equal_, other.equal_);
+  }
+
+  template < class Key, class Value, class Hash1, class Hash2, class Equal >
+  void CuckooHash< Key, Value, Hash1, Hash2, Equal >::insertWithoutCheck(const Key &key, const Value &value)
+  {
+    std::pair< Key, Value > current(key, value);
+    bool firstTable = true;
+    size_t kickCount = 0;
+
+    while (kickCount < capacity_) {
+      if (firstTable) {
+        size_t pos = hashPos1(current.first);
+        if (!table1_[pos].occupied) {
+          table1_[pos].data = current;
+          table1_[pos].occupied = true;
+          ++size_;
+          return;
+        }
+        std::swap(current, table1_[pos].data);
+        firstTable = false;
+      } else {
+        size_t pos = hashPos2(current.first);
+        if (!table2_[pos].occupied) {
+          table2_[pos].data = current;
+          table2_[pos].occupied = true;
+          ++size_;
+          return;
+        }
+        std::swap(current, table2_[pos].data);
+        firstTable = true;
+      }
+      ++kickCount;
+    }
+
+    rehash(capacity_ * 2 + 1);
+    insertWithoutCheck(current.first, current.second);
+  }
+
 }
 
 #endif
