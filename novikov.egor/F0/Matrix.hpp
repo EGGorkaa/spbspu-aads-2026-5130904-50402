@@ -1,6 +1,8 @@
 #ifndef MATRIX_HPP
 #define MATRIX_HPP
 
+#include <cstddef>
+
 namespace novikov
 {
   class Matrix
