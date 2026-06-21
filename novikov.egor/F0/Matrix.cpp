@@ -386,7 +386,7 @@ namespace novikov
       for (size_t j = 0; j < cols; ++j) {
         std::cout << data[i * cols + j] << " ";
       }
-      std::cout << std::endl;
+      std::cout << "\n";
     }
   }
 }
