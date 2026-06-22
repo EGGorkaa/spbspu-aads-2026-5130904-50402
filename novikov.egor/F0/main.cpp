@@ -14,6 +14,17 @@ int main()
   cmds.insert("delete", novikov::Delete);
   cmds.insert("change", novikov::Change);
   cmds.insert("add-row", novikov::AddRow);
+  cmds.insert("add-col", novikov::AddCol);
+  cmds.insert("swap-rows", novikov::SwapRows);
+  cmds.insert("swap-cols", novikov::SwapCols);
+  cmds.insert("delete-row", novikov::DeleteRow);
+  cmds.insert("delete-col", novikov::DeleteCol);
+  cmds.insert("sum", novikov::Sum);
+  cmds.insert("sub", novikov::Sub);
+  cmds.insert("mul", novikov::Mul);
+  cmds.insert("scalar-mul", novikov::ScalarMul);
+  cmds.insert("transpose", novikov::Transpose);
+  cmds.insert("det", novikov::Det);
 
   std::string cmd;
   while (std::cin >> cmd) {
