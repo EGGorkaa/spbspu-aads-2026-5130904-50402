@@ -389,4 +389,70 @@ namespace novikov
       std::cout << "\n";
     }
   }
+
+  bool Matrix::luDecomposition(Matrix &L, Matrix &U) const
+  {
+    if (rows != cols) {
+      throw std::logic_error("Matrix is not square");
+    }
+    L = Matrix(rows, cols);
+    U = Matrix(rows, cols);
+    for (size_t i = 0; i < rows; ++i) {
+      for (size_t j = 0; j < cols; ++j) {
+        L.at(i, j) = 0.0;
+        U.at(i, j) = data[i * cols + j];
+      }
+    }
+    for (size_t k = 0; k < rows; ++k) {
+      if (std::abs(U.at(k, k)) < 1e-10) {
+        return false;
+      }
+      L.at(k, k) = 1.0;
+      for (size_t i = k + 1; i < rows; ++i) {
+        double factor = U.at(i, k) / U.at(k, k);
+        L.at(i, k) = factor;
+
+        for (size_t j = k; j < cols; ++j) {
+          U.at(i, j) -= factor * U.at(k, j);
+        }
+      }
+    }
+    return true;
+  }
+
+  double *Matrix::solveSystem(const double *b) const
+  {
+    if (rows != cols) {
+      throw std::logic_error("Matrix is not square");
+    }
+    Matrix L, U;
+    if (!luDecomposition(L, U)) {
+      throw std::logic_error("Matrix is singular");
+    }
+    double *y = new double[rows]();
+    for (size_t i = 0; i < rows; ++i) {
+      double sum = 0.0;
+      for (size_t j = 0; j < i; ++j) {
+        sum += L.at(i, j) * y[j];
+      }
+      y[i] = b[i] - sum;
+    }
+    double *x = nullptr;
+    try {
+      x = new double[rows]();
+    } catch (const std::bad_alloc &) {
+      delete[] y;
+      throw;
+    }
+    for (size_t i = rows; i > 0; --i) {
+      size_t idx = i - 1;
+      double sum = 0.0;
+      for (size_t j = i; j < rows; ++j) {
+        sum += U.at(idx, j) * x[j];
+      }
+      x[idx] = (y[idx] - sum) / U.at(idx, idx);
+    }
+    delete[] y;
+    return x;
+  }
 }

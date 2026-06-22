@@ -223,6 +223,47 @@ namespace novikov
     }
     Matrix *m = db.get(name);
     double det = m->determinant();
-    out << det << std::endl;
+    out << det << "\n";
+  }
+
+  void Lu(std::istream &in, std::ostream &out, MatrixHash &db)
+  {
+    std::string name;
+    if (!(in >> name)) {
+      throw std::logic_error("Invalid command");
+    }
+    Matrix *m = db.get(name);
+    Matrix L, U;
+    if (!m->luDecomposition(L, U)) {
+      throw std::logic_error("Matrix is singular");
+    }
+    out << "L:" << "\n";
+    L.print();
+    out << "U:" << "\n";
+    U.print();
+  }
+
+  void Solve(std::istream &in, std::ostream &out, MatrixHash &db)
+  {
+    std::string name;
+    if (!(in >> name)) {
+      throw std::logic_error("Invalid command");
+    }
+    Matrix *m = db.get(name);
+    size_t rows = m->getRows();
+    double *b = new double[rows];
+    for (size_t i = 0; i < rows; ++i) {
+      if (!(in >> b[i])) {
+        delete[] b;
+        throw std::logic_error("Invalid command");
+      }
+    }
+    double *x = m->solveSystem(b);
+    for (size_t i = 0; i < rows; ++i) {
+      out << x[i] << " ";
+    }
+    out << "\n";
+    delete[] b;
+    delete[] x;
   }
 }

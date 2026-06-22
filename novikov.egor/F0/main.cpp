@@ -25,6 +25,8 @@ int main()
   cmds.insert("scalar-mul", novikov::ScalarMul);
   cmds.insert("transpose", novikov::Transpose);
   cmds.insert("det", novikov::Det);
+  cmds.insert("lu", novikov::Lu);
+  cmds.insert("solve", novikov::Solve);
 
   std::string cmd;
   while (std::cin >> cmd) {

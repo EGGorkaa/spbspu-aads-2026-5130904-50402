@@ -38,6 +38,8 @@ namespace novikov
     Matrix scalarMultiply(double scalar) const;
     Matrix transpose() const;
     double determinant() const;
+    bool luDecomposition(Matrix &L, Matrix &U) const;
+    double *solveSystem(const double *b) const;
     void print() const;
   };
 }

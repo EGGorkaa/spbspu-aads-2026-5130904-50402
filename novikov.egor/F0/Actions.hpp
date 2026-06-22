@@ -25,6 +25,8 @@ namespace novikov
   void ScalarMul(std::istream &in, std::ostream &out, MatrixHash &db);
   void Transpose(std::istream &in, std::ostream &out, MatrixHash &db);
   void Det(std::istream &in, std::ostream &out, MatrixHash &db);
+  void Lu(std::istream &in, std::ostream &out, MatrixHash &db);
+  void Solve(std::istream &in, std::ostream &out, MatrixHash &db);
 }
 
 #endif
