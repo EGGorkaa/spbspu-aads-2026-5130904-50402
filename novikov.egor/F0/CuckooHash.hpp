@@ -325,4 +325,5 @@ namespace novikov
     return size_ == 0;
   }
 }
+
 #endif
