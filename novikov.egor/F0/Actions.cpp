@@ -38,5 +38,44 @@ namespace novikov
     delete m;
     db.remove(name);
   }
+  
+  void Change(std::istream &in, std::ostream &out, MatrixHash &db)
+  {
+    std::string name;
+    size_t i, j;
+    double val;
+    if(!(in>>name>>i>>j>>val))
+    {
+      throw std::logic_error("Invalid command");
+    }
+    Matrix* m = db.get(name);
+    m->change(i, j, val);
+  }
+
+  void AddRow(std::istream &in, std::ostream &out, MatrixHash &db)
+  {
+    std::string name;
+    size_t index;
+    if(!(in >> name >> index))
+    {
+      throw std::logic_error("Invalid command");
+    }
+    Matrix* m = db.get(name);
+    size_t cols = m->getCols();
+    double* values = new double[cols];
+    size_t count = 0;
+    double val;
+    while(count < cols && (in >> val))
+    {
+      values[count++] = val;
+    }
+    if(count != cols)
+    {
+      delete[] values;
+      throw std::logic_error("Invalid command");
+    }
+    m->addRow(index, values, cols);
+    delete[] values;
+  }
 
 }

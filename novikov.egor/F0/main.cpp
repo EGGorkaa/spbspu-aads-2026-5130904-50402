@@ -11,6 +11,9 @@ int main()
   novikov::CuckooHash< std::string, Command > cmds;
   cmds.insert("create", novikov::Create);
   cmds.insert("show", novikov::Show);
+  cmds.insert("delete", novikov::Delete);
+  cmds.insert("change", novikov::Change);
+  cmds.insert("add-row", novikov::AddRow);
 
   std::string cmd;
   while (std::cin >> cmd) {
