@@ -15,7 +15,6 @@ namespace novikov
   {
     const long long LMAX = std::numeric_limits< long long >::max();
     const long long LMIN = std::numeric_limits< long long >::min();
-
     int priority(const std::string &op)
     {
       if (op == "+" || op == "-")
